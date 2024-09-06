@@ -5,7 +5,7 @@ import os
 app = Flask(__name__)
 
 # Initialize Groq client
-client = Groq(api_key="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")
+client = Groq(api_key="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")
 
 # Read the college data from the file
 file_path = "collegedata.txt"
