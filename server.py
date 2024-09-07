@@ -57,7 +57,7 @@ def generate_prompt(query,memory):
              Here is the provided data : {data}
         Answer the following query based on the information provided about colleges in Rajasthan. The data includes details such as college name, location, courses offered, admission process, fees structure, infrastructure, facilities, faculty, and contact information. Ensure the response is concise and accurate, directly addressing the query with the relevant information.
         in output you just have to output the answer to query not things like output in hindi or english  or aney other thing that user did not ask of  and behave like expert.
-        YOU JUST HAVE TO ANSWER QUERY FOR THE COLLEGES THAT ARE IN THE PROVIDED DATA ONLY. If it is not present in the data just say you dont have sufficient information
+        YOU JUST HAVE TO ANSWER QUERY FOR THE COLLEGES THAT ARE IN THE PROVIDED DATA ONLY. You can answer the by search if the college is present in provided data else If the college is not present in the college list just say you dont have sufficient information about that college
         If possible provide the link of the  college website and contact number.
         Answer the query in the language it was asked exapmle it the query is in english answer in english and if in hindi answer in hindi and so on.
         Never says that it is not confidential info.
@@ -65,7 +65,7 @@ def generate_prompt(query,memory):
         The given query may be from the context of the previous responses and the previous queries asked were : {memory_str}
         in case college is not provided in the query, take context of the last college in the in previus queries.
         And if i ask what i ask you previously just tell the past queries.
-        
+
         
 
         Here is the detailed query: {query}
