@@ -62,7 +62,11 @@ def generate_prompt(query,memory):
         Answer the query in the language it was asked exapmle it the query is in english answer in english and if in hindi answer in hindi and so on.
         Never says that it is not confidential info.
         Try to answer point to point.
-        The given query may be from the context of the previous responses and the previous questions asked were : {memory_str}
+        The given query may be from the context of the previous responses and the previous queries asked were : {memory_str}
+        in case college is not provided in the query, take context of the last college in the in previus queries.
+        And if i ask what i ask you previously just tell the past queries.
+        
+        
 
         Here is the detailed query: {query}
 
