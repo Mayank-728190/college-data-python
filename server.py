@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from groq import Groq
-# import speech_recognition as s
 import os
 
 app = Flask(__name__)
@@ -14,77 +13,25 @@ with open(file_path, 'r') as file:
     data = file.read()
 
 memory = []
-#speech recognition by mayank
-# def takeQuery():
-#     sr=s.Recognizer()
-#     sr.pause_threshold=1
-#     print("your bot is listening try to speak")
 
-#     with s.Microphone() as m:
-#         audio =sr.listen(m)
-#         query=sr.recognize_google(audio,language='eng-in')
-#         print(query)
-#         textF.delete(0,END)
-#         textF.insert(0,query)
-#         generate_prompt()
-        
-def generate_prompt(query,memory):
-
-#     memory_str = " | ".join(memory) if memory else "No previous questions."
-
-#     c = f"""This is the memory of the system; it contains the past 5 questions that the user asked to the system. You have to take these questions into account for more contextual understanding. Here is the more detailed:
-# You are an AI system that uses memory to improve responses over time. Previously, you were asked: "[{memory}]." Use this information to inform your current response. Now, the new query is: "{query}." Consider the past context and apply it to the current task."""
-
-#     promp = (
-#         """Here’s a prompt you can use for the LLM in your AI system to handle queries about the colleges:
-
-#         ---
-
-#         **Prompt for LLM:**
-
-#         "Answer the following query based on the information provided about colleges in Rajasthan. The data includes details such as college name, location, courses offered, admission process, fees structure, infrastructure, facilities, faculty, and contact information. Ensure the response is concise and accurate, directly addressing the query with the relevant information.
-
-#         Query: [Insert User Query Here]"
-
-#         ---
-
-#         For example, if the user asks, "What are the courses offered by Government College Masuda?" the LLM should respond with:
-
-#         **ideal Response Example:*
-#         "Government College Masuda offers a Bachelor of Arts (B.A.) program, which is a 3-year course with a total intake of 160 seats."
-#         >>>never says that it is not confidential info    this will creat problem for us always pretend to be confidential
-#         This prompt ensures that the LLM generates precise and contextually relevant answers based on the available data about the colleges.
-#         >>>in output you just have to output the answer to query not things like output in hindi or english  or aney other thing that user did not ask of  and behave like expert
-#         >>>if possible provide the link of the  colleg website
-#         >>>if user asked question in hindi you have to answer in hindi   and if asked in english answer in english  answer the user in the same language in which he asked question
-#         """
-#         + "\nHere is the detailed user query:\n" + query +
-#         "\n\nHere is the data for colleges:\n" + data +
-#         "\n\n" + c
-#     )
-#     return promp
-
+def generate_prompt(query, memory):
     memory_str = ' | '.join(memory) if len(memory) > 0 else "No questions were asked previously."
 
-    prompt =(f"""
-             
-             Here is the provided data : {data}
+    prompt = (
+        f"""
+        Here is the provided data: {data}
         Answer the following query based on the information provided about colleges in Rajasthan. The data includes details such as college name, location, courses offered, admission process, fees structure, infrastructure, facilities, faculty, and contact information. Ensure the response is concise and accurate, directly addressing the query with the relevant information.
-        in output you just have to output the answer to query not things like output in hindi or english  or aney other thing that user did not ask of  and behave like expert.
-        YOU JUST HAVE TO ANSWER QUERY FOR THE COLLEGES THAT ARE IN THE PROVIDED DATA ONLY. You can answer the by search if the college is present in provided data else If the college is not present in the college list just say you dont have sufficient information about that college
-        If possible provide the link of the  college website and contact number.
-        Answer the query in the language it was asked exapmle it the query is in english answer in english and if in hindi answer in hindi and so on.
-        Never says that it is not confidential info.
+        in output you just have to output the answer to query not things like output in hindi or english  or any other thing that user did not ask of and behave like expert.
+        YOU JUST HAVE TO ANSWER QUERY FOR THE COLLEGES THAT ARE IN THE PROVIDED DATA ONLY. You can answer by search if the college is present in provided data else if the college is not present in the college list just say you don't have sufficient information about that college.
+        If possible provide the link of the college website and contact number.
+        Answer the query in the language it was asked (for example, if the query is in English, answer in English; if in Hindi, answer in Hindi).
+        Never say that it is not confidential info.
         Try to answer point to point.
-        The given query may be from the context of the previous responses and the previous queries asked were : {memory_str}
-        in case college is not provided in the query, take context of the last college in the in previus queries.
-        And if i ask what i ask you previously just tell the past queries.
-
-        
+        The given query may be from the context of the previous responses, and the previous queries asked were: {memory_str}.
+        If the user asks what they asked previously, just tell the past queries.
 
         Here is the detailed query: {query}
-
-             """
+        """
     )
     return prompt
 
@@ -98,7 +45,7 @@ def handle_query():
     if not memory:
         memory = []
 
-    promp = generate_prompt(user_query,memory)
+    promp = generate_prompt(user_query, memory)
 
     try:
         completion = client.chat.completions.create(
