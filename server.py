@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from groq import Groq
+# import speech_recognition as s
 import os
 
 app = Flask(__name__)
@@ -13,7 +14,20 @@ with open(file_path, 'r') as file:
     data = file.read()
 
 memory = []
+#speech recognition by mayank
+# def takeQuery():
+#     sr=s.Recognizer()
+#     sr.pause_threshold=1
+#     print("your bot is listening try to speak")
 
+#     with s.Microphone() as m:
+#         audio =sr.listen(m)
+#         query=sr.recognize_google(audio,language='eng-in')
+#         print(query)
+#         textF.delete(0,END)
+#         textF.insert(0,query)
+#         generate_prompt()
+        
 def generate_prompt(query,memory):
 
 #     memory_str = " | ".join(memory) if memory else "No previous questions."
